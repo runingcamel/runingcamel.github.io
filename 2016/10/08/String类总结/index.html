@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="null"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>String类总结 | Hexo</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">String类总结</h1><a id="logo" href="/.">Hexo</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Inicio</i></a><a href="/archives/"><i class="fa fa-archive"> Archivo</i></a><a href="/about/"><i class="fa fa-user"> Acerca de</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">String类总结</h1><div class="post-meta">Oct 8, 2016<span> | </span><span class="category"><a href="/categories/技术总结/">技术总结</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><h3 id="一、String类的两种赋值方式"><a href="#一、String类的两种赋值方式" class="headerlink" title="一、String类的两种赋值方式"></a>一、String类的两种赋值方式</h3><p><font color="#000000">1、直接赋值</font><br><code>String str = &quot;Hello&quot;;</code></p>
+<p><font color="#000000">2、构造方法赋值</font><br><code>String str = new String(&quot;Hello&quot;);</code></p>
+<p><font color="#000000">3、两种赋值方法的区别</font></p>
+<ul>
+<li>直接赋值法创建一个栈内存和一个堆内存，并且直接入池，以后只要通过直接赋值的方法新建相同的字符串，则指向的是同一块内存；</li>
+<li>构造方法赋值创建一个栈内存和两个堆内存，其中有一个字符串成为垃圾，等待GC回收,可以通过intern()函数进行手动入池。<br><font color="#FF0000">下面给出示意图:</font><img src="https://cl.ly/031D022J3I0N/String%E8%B5%8B%E5%80%BC.png" alt=""></li>
+</ul>
+<hr>
+<h3 id="二、关于字符串比较的说明"><a href="#二、关于字符串比较的说明" class="headerlink" title="二、关于字符串比较的说明"></a>二、关于字符串比较的说明</h3><p>1、”==”比较是数值比较，对于字符串而言就是内存地址的比较，即比较栈内存;String类中的equals()函数用于字符串的内容比较，即比较堆内存。<br>2、举例来说明两者的区别：</p>
+<ul>
+<li><code>String str =new String(&quot;hello&quot;);</code></li>
+<li><code>String str1 = new String(&quot;hello&quot;).intent();</code></li>
+<li><code>String str2 = &quot;hello&quot;;</code></li>
+<li><code>String str3 = &quot;hello&quot;;</code></li>
+</ul>
+<p>则判断一下命题：<br>1.<code>System.out.printf(str == str1);//false</code><br>2.<code>System.out.printf(str == str2);//false</code><br>3.<code>System.out.printf(str1 == str2);//true</code><br>4.<code>System.out.printf(str2 == str3);//true</code><br>5.<code>System.out.printf(str1 == str3);//true</code><br>6.<code>System.out.printf(str.equals(str3));//true</code></p>
+<p><font color="#FF0000">分析:</font><br>　　a.构造赋值所建立的字符串是new出来的，而不是直接赋值”hello”出来的，由上图可以知道;<br>　　b.String类中的equals()函数比较的是内容，故只要字符串相同，名字不同，结果也为true;<br>　　c.手动入池intent()后就进入了直接赋值的那个内存空间了，如同直接赋值一样，这个时候就不存在垃圾。</p>
+<p><font color="#FF0000" size="4px">友情提示：</font>使用<em><font color="#0000FF">equals()</font></em>函数时将字符串常量放在前面可以避免出现空指针异常，如<code>&quot;hello&quot;.equals(str);</code>。</p>
+<hr>
+<h3 id="三、String类常用的函数"><a href="#三、String类常用的函数" class="headerlink" title="三、String类常用的函数"></a>三、String类常用的函数</h3><h5 id="1、字符串和字符"><a href="#1、字符串和字符" class="headerlink" title="1、字符串和字符"></a>1、字符串和字符</h5><ul>
+<li><code>public String(char[] value)</code><font color="#FF0000"> ===&gt; </font>这是一个构造方法，作用是将所有的字符数组内容转换为字符串;</li>
+<li><code>public String(char[] value,int offset,int count)</code> <font color="#FF0000"> ===&gt; </font>这是一个构造方法，作用是将部分字符数组转换成字符串，<em><font color="#0000FF">offset</font></em>表示开始点，<em><font color="#0000FF">count</font></em>表示要操作的字符长度;</li>
+<li><code>public char charAt(int index)</code>#FF0000”&gt;<font color="#FF0000"> ===&gt; </font> 普通方法，作用是取得指定索引位置上的字符;</li>
+<li><code>public char[] toCharArray()</code>#FF0000”&gt;<font color="#FF0000"> ===&gt; </font> 普通方法，作用是将字符串转换为字符数组。</li>
+</ul>
+<h5 id="2、字符串和字节"><a href="#2、字符串和字节" class="headerlink" title="2、字符串和字节"></a>2、字符串和字节</h5><ul>
+<li><code>public String(byte[] bytes)</code><font color="#FF0000"> ===&gt; </font>这是一个构造方法，作用是将所有的字节数组内容转换为字符串;</li>
+<li><code>public String(byte[] bytes,int offset,int length)</code> <font color="#FF0000"> ===&gt; </font>这是一个构造方法，作用是将部分字节数组转换成字符串，<em><font color="#0000FF">offset</font></em>表示开始点，<em><font color="#0000FF">length</font></em>表示要操作的字节长度;</li>
+<li><code>public byte[] getBytes()</code><font color="#FF0000"> ===&gt; </font> 普通方法，作用是将字符串变为字节数组;</li>
+<li>public byte[] getBytes(String charsetName)`#FF0000”&gt;<font color="#FF0000"> ===&gt; </font> 普通方法，作用是字符串转码操作。</li>
+</ul>
+<h5 id="3、字符串比较"><a href="#3、字符串比较" class="headerlink" title="3、字符串比较"></a>3、字符串比较</h5><ul>
+<li><code>public boolean equals(String anObject)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用区分大小写的内容比较，返回值为布尔型;</li>
+<li><code>public boolean equalsIgnoreCase(String anotherString)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用不区分大小写的内容比较，返回值为布尔型;</li>
+<li><code>public int compareTo(String anotherString)</code><font color="#FF0000"> ===&gt; </font> 普通方法，作用是比较两个字符串的大小，返回结果又三种:大于(返回结果大于0)，小于(返回结果小于0)和等于(返回结果等于0)。</li>
+</ul>
+<h5 id="4、字符串查找"><a href="#4、字符串查找" class="headerlink" title="4、字符串查找"></a>4、字符串查找</h5><ul>
+<li><code>public boolean contains(String s)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用查找指定的子字符是否存在，返回值为布尔型;</li>
+<li><code>public int indexOf(String str)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用从头查找指定字符串的位置，找不到返回-1;</li>
+<li><code>public int indexOf(String str,int fromIndex)</code><font color="#FF0000"> ===&gt; </font> 普通方法，作用是由指定位置向后查找字符串的位置，找不到返回-1。</li>
+<li><code>public int lastIndexOf(String str)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用从后向前查找指定字符串的位置，找不到返回-1;</li>
+<li><code>public int lastindexOf(String str,int fromIndex)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是由指定位置从后向前查找指定字符串的位置，找不到返回-1;</li>
+<li><code>public boolean startsWith(String prefix)</code><font color="#FF0000"> ===&gt; </font> 普通方法，作用是判断是否以指定的字符串开头。</li>
+<li><code>public boolean startsWith(String prefix，int offset)</code><font color="#FF0000"> ===&gt; </font> 普通方法，作用是从<em><font color="#0000FF">offset</font></em>位置判断是否以指定字符串开头。</li>
+<li><code>public boolean endsWith(String suffix)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是判断是否以指定字符串结尾;</li>
+</ul>
+<h5 id="5、字符串替换"><a href="#5、字符串替换" class="headerlink" title="5、字符串替换"></a>5、字符串替换</h5><ul>
+<li><code>public String replaceAll(String regex, String replacement)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是用<em><font color="#0000FF">replacement</font></em>来代替原来字符串中所有的<em><font color="#0000FF">regex</font></em>;</li>
+<li><code>public String replaceFirst(String regex, String replacement)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是用<em><font color="#0000FF">replacement</font></em>来代替原来字符串中第一个<em><font color="#0000FF">regex</font></em>;</li>
+</ul>
+<h5 id="6、字符串截取"><a href="#6、字符串截取" class="headerlink" title="6、字符串截取"></a>6、字符串截取</h5><ul>
+<li><code>public String substring(int beginIndex)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是从指定位置上截取到结尾，返回的是截取到的内容;</li>
+<li><code>public String substring(int beginIndex, int endIndex)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是截取指定范围的内容;</li>
+</ul>
+<h5 id="7、字符串拆分"><a href="#7、字符串拆分" class="headerlink" title="7、字符串拆分"></a>7、字符串拆分</h5><ul>
+<li><code>public String[] split(String regex)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是按照指定的字符串全拆分，返回的是字符串数组;</li>
+<li><code>public String[] split(String regex, int limit)</code><font color="#FF0000"> ===&gt; </font>普通方法，作用是拆分为指定长度为<em><font color="#0000FF">limit</font></em>的字符串数组;</li>
+</ul>
+<p><font color="#FF0000" size="4px">注意：</font>使用转义时<em><font color="#0000FF"><code>&quot;\\&quot;</code></font></em>表示的是一个<code>&quot;\&quot;</code>,因为<code>&quot;\&quot;</code>也需要转义,然后用”\“来进行一些需要转义的字符，如<code>&quot;\\.&quot;</code>表示的是<code>&quot;.&quot;</code>。</p>
+<h5 id="8、其他方法汇总"><a href="#8、其他方法汇总" class="headerlink" title="8、其他方法汇总"></a>8、其他方法汇总</h5><ul>
+<li><code>public boolean isEmpty()</code><font color="#FF0000"> ===&gt; </font>普通方法，判断是否为空字符串;</li>
+<li><code>public int length()</code><font color="#FF0000"> ===&gt; </font>普通方法，取得字符串长度;</li>
+<li><code>public String trim()</code><font color="#FF0000"> ===&gt; </font>普通方法，去掉左右空格;</li>
+<li><code>public String toLowerCase()</code><font color="#FF0000"> ===&gt; </font>普通方法，将全部字符串转化为小写;</li>
+<li><code>public String toUpperCase()</code><font color="#FF0000"> ===&gt; </font>普通方法，将全部字符串转化为大写;</li>
+<li><code>public String intern()</code><font color="#FF0000"> ===&gt; </font>普通方法，入池;</li>
+<li><code>public String concat(String str)</code><font color="#FF0000"> ===&gt; </font>普通方法，字符串连接。</li>
+</ul>
+<p><font color="#FF0000" size="4px">注意：</font>数组中<em><font color="#0000FF"><code>length</code></font></em>是一个属性，而字符串中是length()函数。</p>
+<hr>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2016/10/08/String类总结/" data-id="civ0i0peq0000agrboqxlu5cy" class="article-share-link">Cuota</a><div class="tags"><a href="/tags/Java/">Java</a></div><div class="post-nav"><a href="/2016/10/10/this、static关键字知多少/" class="pre">this、static关键字知多少</a><a href="/2016/10/08/学习计划-第一天/" class="next">学习计划-第一天</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categorías</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/学习计划/">学习计划</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术总结/">技术总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活记录/">生活记录</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Etiquetas</i></div><div class="tagcloud"><a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/record/" style="font-size: 15px;">record</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recientes</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/11/02/hello-world (2)/">Hello World</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/02/ejs/">ejs</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/01/EJS学习笔记-1、EJS是什么/">EJS学习笔记:1、EJS是什么</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/20/突然的灵感/">突然的灵感</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/10/分分钟叫你搭建Hexo博客-基础篇/">分分钟叫你搭建Hexo博客-基础篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/10/this、static关键字知多少/">this、static关键字知多少</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/String类总结/">String类总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/学习计划-第一天/">学习计划-第一天</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/07/如何选择/">如何选择</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Blogroll</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Hexo.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
